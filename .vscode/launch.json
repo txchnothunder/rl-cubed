@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Hybrid Solver Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/cube_solver.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}/src" }
+    },
+    {
+      "name": "Run Visualizer (Policy Iteration)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/rubiks_visualizer.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}/src" }
+    },
+    {
+      "name": "Run Main (Basic Cube Tests)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}/src" }
+    }
+  ]
+}

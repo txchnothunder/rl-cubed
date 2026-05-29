@@ -250,7 +250,9 @@ class HybridSolver:
         if verbose: print(f"Start: {self._score()}/54 correct")
 
         # Phase 1 — IDDFS (fast for ≤7 move scrambles)
-        budget1 = min(12.0, time_limit * 0.15)
+        # Keep budget tight — IDDFS depth 7 = 15^7 ~170M nodes worst case, but
+        # pruning cuts it to ~1-2s in practice. We don't want it eating beam's time.
+        budget1 = min(3.0, time_limit * 0.10)
         if verbose: print(f"Phase 1: IDDFS depth ≤ 7  ({budget1:.0f}s budget)")
         if self._solve_iddfs(max_depth=7, budget=budget1):
             if verbose:
@@ -259,10 +261,11 @@ class HybridSolver:
             return self.solution
 
         # Phase 2 — Beam search (handles medium scrambles well)
-        budget2 = min(40.0, (deadline - time.time()) * 0.5)
-        if budget2 > 2:
-            if verbose: print(f"Phase 2: Beam search width=200  ({budget2:.0f}s budget)")
-            if self._solve_beam(width=200, max_depth=30, budget=budget2):
+        # Give beam the majority of the remaining budget
+        budget2 = min(60.0, (deadline - time.time()) * 0.75)
+        if budget2 > 1:
+            if verbose: print(f"Phase 2: Beam search width=500  ({budget2:.0f}s budget)")
+            if self._solve_beam(width=500, max_depth=40, budget=budget2):
                 if verbose:
                     print(f"Solved by beam in {len(self.solution)} moves "
                           f"({time.time()-start:.2f}s)")
